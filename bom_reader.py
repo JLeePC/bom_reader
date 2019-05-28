@@ -26,6 +26,7 @@ num_to_skip = []
 job_range = []
 stop_loop = False
 skip_me = str(input("Do you have numbers to skip? (Y/N)"))
+start_time = time.time()
 if 'Y' in skip_me or 'y' in skip_me:
     # stop_loop is a secondary measure to prevent infinite loops, not required, but precautionary
     while not stop_loop:
@@ -87,4 +88,6 @@ try:
 except KeyboardInterrupt:
     print('\nDone')
 
+elapsed_time = round(time.time()-start_time, 3)
+print('Elapsed time: ' + str(elapsed_time))
 print('\nComplete.')
