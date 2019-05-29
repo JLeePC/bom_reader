@@ -6,6 +6,7 @@ import openpyxl
 
 pyautogui.PAUSE = 0.05
 
+
 print('Press Ctrl-C to quit.')
 
 # new line (925, 330)
@@ -14,7 +15,7 @@ print('Press Ctrl-C to quit.')
 # ask for fine name and complete the path automatically
 
 job_number = input('Whats the job number?: ')
-path = 'C:\\Users\\jlee.NTPV\\Desktop\\BOM\\' + job_number + ' BOM.xlsx'
+path = 'C:\\Users\\jlee.NTPV\\Documents\\Justyn\\BOM\\' + job_number + ' BOM.xlsx'
 
 # see how many rows
 wb_obj = openpyxl.load_workbook(path)
@@ -26,6 +27,7 @@ num_to_skip = []
 job_range = []
 stop_loop = False
 skip_me = str(input("Do you have numbers to skip? (Y/N)"))
+print('Time Start.')
 start_time = time.time()
 if 'Y' in skip_me or 'y' in skip_me:
     # stop_loop is a secondary measure to prevent infinite loops, not required, but precautionary
@@ -89,5 +91,5 @@ except KeyboardInterrupt:
     print('\nDone')
 
 elapsed_time = round(time.time()-start_time, 3)
-print('Elapsed time: ' + str(elapsed_time))
+print('\nElapsed time: ' + str(elapsed_time))
 print('\nComplete.')
