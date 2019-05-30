@@ -15,7 +15,7 @@ print('Press Ctrl-C to quit.')
 # ask for fine name and complete the path automatically
 
 job_number = input('Whats the job number?: ')
-path = 'C:\\Users\\jlee.NTPV\\Documents\\Justyn\\BOM\\' + job_number + ' BOM.xlsx'
+path = 'C:\\Users\\jlee.NTPV\\Documents\\BOM\\' + job_number + ' BOM.xlsx'
 
 # see how many rows
 wb_obj = openpyxl.load_workbook(path)
@@ -32,9 +32,9 @@ start_time = time.time()
 if 'Y' in skip_me or 'y' in skip_me:
     # stop_loop is a secondary measure to prevent infinite loops, not required, but precautionary
     while not stop_loop:
-        user_input = input("Please enter the number you would like to skip (enter STOP to quit): ")
+        user_input = input("Please enter the number you would like to skip (enter + to quit): ")
         try:
-            if 'STOP' in str(user_input) or 'stop' in str(user_input):
+            if '+' in str(user_input):
                 stop_loop = True
                 break
         except ValueError:
@@ -43,7 +43,7 @@ if 'Y' in skip_me or 'y' in skip_me:
         try:
             placeholder.append(int(user_input)+2)
         except ValueError:
-            print("Please enter a valid number or STOP to quit")
+            print("Please enter a valid number or + to quit")
             continue
     # We need to remove possible duplicates
     for num in placeholder:
