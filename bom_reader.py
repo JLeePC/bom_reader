@@ -41,7 +41,7 @@ if 'Y' in skip_me or 'y' in skip_me:
             continue
             
         try:
-            placeholder.append(int(user_input)+2)
+            placeholder.append(int(user_input))
         except ValueError:
             print("Please enter a valid number or + to quit")
             continue
