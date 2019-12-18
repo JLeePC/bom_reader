@@ -4,9 +4,6 @@ import pyautogui
 import time
 import openpyxl
 
-pyautogui.PAUSE = 0.5
-
-
 print('Press Ctrl-C to quit.')
 
 # new line (925, 330)
@@ -72,10 +69,13 @@ try:
         multi = sheet_obj.cell(row = i, column = 3)
 
         part = str(part_no.value)
+        
         if " " in part:
             part = part.replace(" ","")
         if "\n" in part:
             part = part.replace("\n","")
+        if "N/A" in part:
+            continue
 
         # multiply the MULTI and QTY
         total = qty.value*multi.value
@@ -87,12 +87,14 @@ try:
 
         # type out part_no
         pyautogui.typewrite(part)
+        time.sleep(0.1)
 
         # tab
         pyautogui.typewrite(['tab'])
 
         # type required
         pyautogui.typewrite(str(required))
+        time.sleep(0.1)
 
 except KeyboardInterrupt:
     print('\nDone')
