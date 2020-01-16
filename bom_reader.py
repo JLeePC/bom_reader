@@ -23,7 +23,7 @@ placeholder = []
 num_to_skip = []
 job_range = []
 stop_loop = False
-skip_me = str(input("Do you have numbers to skip? (Y/N)"))
+skip_me = str(input("Do you have numbers to skip? (Y/N): "))
 print('Time Start.')
 start_time = time.time()
 if 'Y' in skip_me or 'y' in skip_me:
