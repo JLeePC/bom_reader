@@ -1,5 +1,6 @@
 # BOM reader for MISys
 
+import os
 import pyautogui
 import time
 import openpyxl
@@ -11,8 +12,13 @@ print('Press Ctrl-C to quit.')
 
 # ask for fine name and complete the path automatically
 
-job_number = input('Whats the job number?: ')
-path = 'C:\\Users\\jlee.NTPV\\Documents\\BOM\\' + job_number + ' BOM.xlsx'
+job_number = input('Whats the job number?: ').upper()
+os.chdir('C:\\Users\\jlee.NTPV\\Documents\\BOM')
+for i in os.listdir():
+    print(i)
+    i_list = i.split(' ')
+    if job_number == i_list[0]:
+        path = 'C:\\Users\\jlee.NTPV\\Documents\\BOM\\' + i
 
 # see how many rows
 wb_obj = openpyxl.load_workbook(path)
@@ -75,6 +81,10 @@ try:
         if "\n" in part:
             part = part.replace("\n","")
         if "N/A" in part:
+            continue
+        if len(part) == 0:
+            continue
+        if 'BY CUSTOMER' in part or 'BYCUSTOMER' in part:
             continue
 
         # multiply the MULTI and QTY
