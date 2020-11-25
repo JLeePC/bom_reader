@@ -5,7 +5,7 @@ import pyautogui
 import time
 import openpyxl
 
-pyautogui.PAUSE = 0.75
+pyautogui.PAUSE = 0.5
 
 print('Press Ctrl-C to quit.')
 
@@ -94,8 +94,9 @@ try:
         required = str(total)
 
         # new line
-        pyautogui.click(925, 330)
-        # pyautogui.click(919,313)
+        # pyautogui.click(925, 330)
+        pyautogui.click(919,313)
+        time.sleep(0.5)
 
         # type out part_no
         pyautogui.typewrite(part)
