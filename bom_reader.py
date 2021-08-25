@@ -84,6 +84,8 @@ try:
             part = part.replace("\n","")
         if "N/A" in part:
             continue
+        if "NA" in part and len(part) == 2:
+            continue
         if len(part) == 0:
             continue
         if 'BY CUSTOMER' in part or 'BYCUSTOMER' in part:
@@ -94,8 +96,8 @@ try:
         required = str(total)
 
         # new line
-        # pyautogui.click(925, 330)
-        pyautogui.click(919,313)
+        pyautogui.click(925, 330)
+        # pyautogui.click(919,313)
         time.sleep(0.5)
 
         # type out part_no
