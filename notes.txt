@@ -1,0 +1,13 @@
+Since im reading data straight from misys i should be able to delete all lines accessed then just add the lines after i do what i need to do.
+
+So it will basically be this workflow:
+    fetch data if needed
+    parse it to get the info needed for the current bom
+    see if the data matches the bom that was exported from solidworks
+    if it matches nothing needs to be done
+    if it doesnt i need to go to that bom in misys and make it match what is currently in the bom excel
+    once that is done i can save the bom in misys and just delete all lines from the csv and add the up to date lines at the bottom
+
+My idea is to loop through all boms in the 'BOM' folder on my work PC. Which means i should delete all file sin the folder if this program runs succesfully.
+
+With all the things i learn from this project i should be able to apply them to my inventory.py project and speed things up exponentially.

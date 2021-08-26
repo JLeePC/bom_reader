@@ -1,10 +1,11 @@
 import os
+import time
 import openpyxl
-import pyautogui as pygui
 import pandas as pd
 import datetime as dt
 import pygetwindow as gw
-import time
+import pyautogui as pygui
+
 
 # coordinates
 item_no = 250,94
