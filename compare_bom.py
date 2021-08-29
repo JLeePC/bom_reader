@@ -25,7 +25,7 @@ delete_line = 1885,342
 refresh = 45,58
 refresh_yes = 1019,601
 save = 76,58
-file = 15,32
+file_menu = 15,32
 export = 54,185
 export_type = 1129,357
 path = 1104,383
@@ -43,6 +43,7 @@ new_rev_yes = 1010,601
 revision = 145,162
 current_revision = 703,256
 item_no_ok = 1112,600
+
 class WrongItem(Exception):
     pass
 
@@ -59,27 +60,9 @@ def copy_clipboard():
     time.sleep(.01)
     return pyperclip.paste()
 
-# use the up arrow a specified number of times on the keyboard to naivigate the gui
-def arrow_up(x):
-    for _ in range(x):
-        pygui.typewrite(['up'])
-    wait = x / 25
-    if wait < .25:
-        wait = .25
-    time.sleep(wait)
-
-# use the down arrow a specified number of times on the keyboard to naivigate the gui
-def arrow_down(x):
-    for _ in range(x):
-        pygui.typewrite(['down'])
-    wait = x / 25
-    if wait < .25:
-        wait = .25
-    time.sleep(wait)
-
 def get_bom_data():
     print("Getting data")
-    pygui.click(file)
+    pygui.click(file_menu)
     pygui.click(export)
     pygui.click(export_type)
     pygui.typewrite(["down"])
@@ -143,7 +126,6 @@ def main():
                 else:
                     start_range = 2
                 max_row = sheet_obj.max_row
-                # bom_range = range(start_range,max_row+1,1)
                 active_excel = []
                 for i in range(start_range,max_row+1,1):
                     builder = {}
@@ -234,36 +216,6 @@ def main():
                                     builder['part'] = i['part']
                                     builder['qty'] = i['qty']
                                     oredered_bom_items.append(builder)
-
-                    # count how many labor lines there are
-                    # active_labor = []
-                    # labor_count = 0
-                    # for row in active_bom:
-                    #     if 'LABOR-' in row['part']:
-                    #         active_labor.append(row)
-                    #         labor_count = labor_count + 1
-
-                    # loop through both lists and see if they match
-                    # for i in range(len(active_excel)):
-                    #     if 'LABOR-' in ordered_bom[0]['part']:
-                    #         line = i + labor_count
-                    #     else:
-                    #         line = i
-                    #     try:
-                    #         if active_excel[i]['part'] == ordered_bom[line]['part'] and active_excel[i]['qty'] == ordered_bom[line]['qty']:
-                                
-                    #             match = True
-                    #         else:
-                    #             match = False
-                    #             print('Line {} had the following differences: {} {}, {} {}'.format(line,active_excel[i]['part'], active_excel[i]['qty'], ordered_bom[line]['part'], ordered_bom[line]['qty']))
-                    #             break
-                    #     except IndexError:
-                    #         if 'LABOR-' not in ordered_bom[line]['part']:
-                    #             match = False
-                    #         else:
-                    #             match = True
-                    #         print(ordered_bom[line]['part'])
-                    #         print('index error')
 
                     # if they dont match delete all rows in misys and input the correct data
                     if oredered_bom_items == active_excel:
@@ -409,7 +361,6 @@ def main():
                 else:
                     print('Bom rev is lower than MiSys rev.')
                     continue
-                
 
 if __name__ == '__main__':
     main()
