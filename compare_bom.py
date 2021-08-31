@@ -114,6 +114,7 @@ def main():
         # loop through boms in bom folder
         for filename in os.listdir(r"C:\Users\jlee.NTPV\Documents\BOM"):
             if filename.endswith(".xlsx"):
+                # load xlsx and read the lines to store the bom
                 wb_obj = openpyxl.load_workbook("C:\\Users\\jlee.NTPV\\Documents\\BOM\\"+filename)
                 drawing_no = filename.replace(".xlsx","")
                 drawing_no_list = drawing_no.split(" ")
