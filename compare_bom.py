@@ -7,41 +7,9 @@ import datetime as dt
 import pygetwindow as gw
 import pyautogui as pygui
 from decimal import Decimal
+from modules.coordinates import *
+from modules.get_bom_data import get_bom_data
 from PIL import Image, ImageGrab, ImageFilter
-
-# coordinates
-terminal = 2385,15
-item_no = 250,94
-rev_no = 458,94
-header = 41,165
-material = 207,163
-line_top = 1885,235
-line_up = 1884,255
-line_down = 1885,276
-line_bottom = 1884,300
-new_line = 1886,322
-delete_line = 1885,342
-refresh = 45,58
-refresh_yes = 1019,601
-save = 76,58
-file_menu = 15,32
-export = 54,185
-export_type = 1129,357
-path = 1104,383
-deselect_bom = 771,437
-deselect_bom_routing = 771,453
-deselect_bom_location = 771,485
-deselect_alt_comp = 771,500
-export_ok = 781,701
-select_csv = 880,396
-export_complete_ok = 793,601
-new_no = 1017,679
-new_ok = 868,567
-new_rev = 525,95
-new_rev_yes = 1010,601
-revision = 145,162
-current_revision = 703,256
-item_no_ok = 1112,600
 
 class WrongItem(Exception):
     pass
@@ -58,27 +26,6 @@ def copy_clipboard():
     pygui.hotkey('ctrl', 'c')
     time.sleep(.01)
     return pyperclip.paste()
-
-# fetch all bom data from misys through the menus
-def get_bom_data():
-    print("Getting data")
-    pygui.click(file_menu)
-    pygui.click(export)
-    pygui.click(export_type)
-    pygui.typewrite(["down"])
-    pygui.hotkey('enter')
-    pygui.click(path)
-    pygui.typewrite('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
-    pygui.click(deselect_bom)
-    pygui.click(deselect_bom_routing)
-    pygui.click(deselect_bom_location)
-    pygui.click(deselect_alt_comp)
-    pygui.click(export_ok)
-    while len(gw.getWindowsWithTitle('Export Bills of Material Information')) == 0:
-        time.sleep(1)
-    pygui.click(export_complete_ok)
-    while len(gw.getWindowsWithTitle('Export Bills of Material Information')) == 1:
-        time.sleep(1)
 
 # when incorrect part is entered a window pops up. detect that to tell the user to fix the part and get rid of the window
 def item_doesnt_exist(x,y):
