@@ -8,7 +8,7 @@ import pygetwindow as gw
 import pyautogui as pygui
 from decimal import Decimal
 from modules.coordinates import *
-from modules.get_bom_data import get_bom_data
+from get_bom_data import get_bom_data
 from PIL import Image, ImageGrab, ImageFilter
 
 class WrongItem(Exception):
