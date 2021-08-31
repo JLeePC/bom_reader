@@ -6,8 +6,8 @@ import pandas as pd
 import datetime as dt
 import pygetwindow as gw
 import pyautogui as pygui
+from coordinates import *
 from decimal import Decimal
-from modules.coordinates import *
 from get_bom_data import get_bom_data
 from PIL import Image, ImageGrab, ImageFilter
 
