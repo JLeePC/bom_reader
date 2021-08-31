@@ -1,7 +1,7 @@
 import time
 import pygetwindow as gw
 import pyautogui as pygui
-from coordinates import *
+from modules.coordinates import *
 
 # fetch all bom data from misys through the menus
 def get_bom_data():
