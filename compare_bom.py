@@ -9,7 +9,6 @@ import pyautogui as pygui
 from decimal import Decimal
 from PIL import Image, ImageGrab, ImageFilter
 
-
 # coordinates
 terminal = 2385,15
 item_no = 250,94
@@ -60,6 +59,7 @@ def copy_clipboard():
     time.sleep(.01)
     return pyperclip.paste()
 
+# fetch all bom data from misys through the menus
 def get_bom_data():
     print("Getting data")
     pygui.click(file_menu)
@@ -80,8 +80,9 @@ def get_bom_data():
     while len(gw.getWindowsWithTitle('Export Bills of Material Information')) == 1:
         time.sleep(1)
 
+# when incorrect part is entered a window pops up. detect that to tell the user to fix the part and get rid of the window
 def item_doesnt_exist(x,y):
-    print('Item {} does not exist in {}. Please fix then try again.'.format(x,y))
+    print(f'Item {x} does not exist in {y}. Please fix then try again.')
     pygui.click(new_no)
     while len(gw.getWindowsWithTitle('Bills of Material - North Texas Pressure Vessels Inc. Error')) == 0:
         time.sleep(1)
@@ -161,7 +162,7 @@ def main():
                 pygui.click(header)
                 time.sleep(1)
                 if len(gw.getWindowsWithTitle('Bills of Material - North Texas Pressure Vessels Inc.')) == 2:
-                    print('{} does not exist'.format(drawing_no_list[0]))
+                    print(f'{drawing_no_list[0]} does not exist')
                     pygui.click(item_no_ok)
                     time.sleep(1)
                     pygui.click(item_no_ok)
@@ -219,9 +220,10 @@ def main():
 
                     # if they dont match delete all rows in misys and input the correct data
                     if oredered_bom_items == active_excel:
-                        print("{} matched MiSys.".format(drawing_no_list[0]))
+                        print(f"{drawing_no_list[0]} matched MiSys.")
                     else:
-                        difference = [item for item in active_excel if item not in oredered_bom_items ]
+                        difference = [item for item in active_excel if item not in oredered_bom_items]
+                        print(difference)
                         print(f'The first different item was {difference[0]}')
                         try:
                             pygui.doubleClick(item_no)
@@ -234,7 +236,7 @@ def main():
                                 pygui.typewrite(row['part'])
                                 pygui.typewrite(['tab'])
                                 time.sleep(1)
-                                if len(gw.getWindowsWithTitle('New BOM Component for BOM No. {} Rev {}'.format(drawing_no_list[0], excel_rev))) == 1:
+                                if len(gw.getWindowsWithTitle(f'New BOM Component for BOM No. {drawing_no_list[0]} Rev {excel_rev}')) == 1:
                                     raise WrongItem
                                 pygui.typewrite(str(row['qty']))
                                 builder['RECTYPE'] = "<TBLNAME>"
