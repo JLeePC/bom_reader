@@ -11,24 +11,28 @@ from decimal import Decimal
 from get_bom_data import get_bom_data
 from PIL import Image, ImageGrab, ImageFilter
 
+
 class WrongItem(Exception):
     pass
 
-# just click the terminal to be able to type in it if its not already focused
+
 def focus_terminal():
+    # just click the terminal to be able to type in it if its not already focused
     # i can tell if its already focused if the mouse is already there
     mouse_postion = pygui.position()
     if not mouse_postion.x == terminal[0] and not mouse_postion.y == terminal[1]:
         pygui.click(terminal[0], terminal[1])
 
-# for copying what text is highlighted to save as a variable 
+
 def copy_clipboard():
+    # for copying what text is highlighted to save as a variable
     pygui.hotkey('ctrl', 'c')
     time.sleep(.01)
     return pyperclip.paste()
 
-# when incorrect part is entered a window pops up. detect that to tell the user to fix the part and get rid of the window
-def item_doesnt_exist(x,y):
+
+def item_doesnt_exist(x, y):
+    # when incorrect part is entered a window pops up. detect that to tell the user to fix the part and get rid of the window
     print(f'Item {x} does not exist in {y}. Please fix then try again.')
     pygui.click(new_no)
     while len(gw.getWindowsWithTitle('Bills of Material - North Texas Pressure Vessels Inc. Error')) == 0:
@@ -41,16 +45,19 @@ def item_doesnt_exist(x,y):
         time.sleep(1)
     pygui.click(refresh_yes)
 
+
 def main():
     # see if the 'Bill of Materials.CSV' file exists and is recent. if its not export the data again
     today = dt.datetime.now().date()
     try:
-        filetime = dt.datetime.fromtimestamp(os.path.getctime('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV'))
+        filetime = dt.datetime.fromtimestamp(os.path.getctime(
+            'D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV'))
 
     except FileNotFoundError:
         print("'Bill of Material Details.CSV' File not found")
         get_bom_data()
-        filetime = dt.datetime.fromtimestamp(os.path.getctime('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV'))
+        filetime = dt.datetime.fromtimestamp(os.path.getctime(
+            'D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV'))
 
     if filetime.date() != today:
         os.remove('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
@@ -62,13 +69,14 @@ def main():
         for filename in os.listdir(r"C:\Users\jlee.NTPV\Documents\BOM"):
             if filename.endswith(".xlsx"):
                 # load xlsx and read the lines to store the bom
-                wb_obj = openpyxl.load_workbook("C:\\Users\\jlee.NTPV\\Documents\\BOM\\"+filename)
-                drawing_no = filename.replace(".xlsx","")
+                wb_obj = openpyxl.load_workbook(
+                    "C:\\Users\\jlee.NTPV\\Documents\\BOM\\"+filename)
+                drawing_no = filename.replace(".xlsx", "")
                 drawing_no_list = drawing_no.split(" ")
                 excel_rev = drawing_no_list[2]
-                excel_rev = int(excel_rev.replace("R",""))
+                excel_rev = int(excel_rev.replace("R", ""))
                 excel_qty = drawing_no_list[3]
-                excel_qty = int(excel_qty.replace("X",""))
+                excel_qty = int(excel_qty.replace("X", ""))
                 sheet_obj = wb_obj.active
                 if 'BILL OF MATERIAL' in sheet_obj.cell(row=1, column=1).value:
                     start_range = 3
@@ -76,16 +84,16 @@ def main():
                     start_range = 2
                 max_row = sheet_obj.max_row
                 active_excel = []
-                for i in range(start_range,max_row+1,1):
+                for i in range(start_range, max_row+1, 1):
                     builder = {}
-                    part_no = sheet_obj.cell(row = i, column = 5)
-                    qty = sheet_obj.cell(row = i, column = 2)
-                    multi = sheet_obj.cell(row = i, column = 3)
+                    part_no = sheet_obj.cell(row=i, column=5)
+                    qty = sheet_obj.cell(row=i, column=2)
+                    multi = sheet_obj.cell(row=i, column=3)
                     part_no = str(part_no.value)
                     if " " in part_no:
-                        part_no = part_no.replace(" ","")
+                        part_no = part_no.replace(" ", "")
                     if "\n" in part_no:
-                        part_no = part_no.replace("\n","")
+                        part_no = part_no.replace("\n", "")
                     if "N/A" in part_no:
                         continue
                     if "NA" in part_no and len(part_no) == 2:
@@ -97,7 +105,7 @@ def main():
 
                     # multiply the MULTI and QTY
                     total = Decimal(qty.value*multi.value*excel_qty)
-                    total = float(round(total,3))
+                    total = float(round(total, 3))
 
                     # add info to a list
                     builder['part'] = part_no
@@ -117,19 +125,20 @@ def main():
                     time.sleep(1)
                     continue
                 os.chdir('png')
-                while pygui.locateOnScreen('allocated.png', region=(42,190,120,20)) is None:
+                while pygui.locateOnScreen('allocated.png', region=(42, 190, 120, 20)) is None:
                     time.sleep(1)
                 os.chdir('..')
                 pygui.click(material)
                 os.chdir('png')
-                while pygui.locateOnScreen('alternates.png', region=(124,1000,75,25)) is None:
+                while pygui.locateOnScreen('alternates.png', region=(124, 1000, 75, 25)) is None:
                     time.sleep(1)
                 os.chdir('..')
 
                 # make sure the bom rev equals the rev from the drawing bom
                 pygui.doubleClick(rev_no)
                 rev = int(copy_clipboard())
-                data = pd.read_csv('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
+                data = pd.read_csv(
+                    'D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
                 if rev == excel_rev:
                     active_bom = []
                     data_drop = []
@@ -156,7 +165,7 @@ def main():
                     # reorder the data so it will match the excel bom
                     ordered_bom = []
                     oredered_bom_items = []
-                    for line in range(0,len(active_bom)+2):
+                    for line in range(0, len(active_bom)+2):
                         for i in active_bom:
                             if int(i['line']) == line - 1:
                                 ordered_bom.append(i)
@@ -170,12 +179,12 @@ def main():
                     if oredered_bom_items == active_excel:
                         print(f"{drawing_no_list[0]} matched MiSys.")
                     else:
-                        difference = [item for item in active_excel if item not in oredered_bom_items]
-                        print(difference)
+                        difference = [
+                            item for item in active_excel if item not in oredered_bom_items]
                         print(f'The first different item was {difference[0]}')
                         try:
                             pygui.doubleClick(item_no)
-                            pygui.click(delete_line,clicks=len(ordered_bom))
+                            pygui.click(delete_line, clicks=len(ordered_bom))
                             new_bom = []
                             line_no = 1
                             for row in active_excel:
@@ -201,9 +210,7 @@ def main():
                                 builder['opCode'] = ""
                                 builder['srcLoc'] = "NTPV"
                                 builder['altItems'] = 0
-
                                 new_bom.append(builder)
-
                                 line_no = line_no + 1
 
                             for row in ordered_bom:
@@ -214,36 +221,28 @@ def main():
                                     pygui.typewrite(['tab'])
                                     time.sleep(1)
                                     pygui.typewrite(str(row['qty']))
-
-                                    # builder['RECTYPE'] = "<TBLNAME>"
-                                    # builder['MIBOMD'] = "MIBOMD"
                                     builder['bomItem'] = drawing_no_list[0]
                                     builder['bomRev'] = str(excel_rev)
-                                    # builder['bomEntry'] = line_no
                                     builder['lineNbr'] = line_no
-                                    # builder['dType'] = 0
                                     builder['partId'] = row['part']
                                     builder['qty'] = row['qty']
-                                    # builder['lead'] = 0
-                                    # builder['cmnt'] = ""
-                                    # builder['opCode'] = ""
-                                    # builder['srcLoc'] = "NTPV"
-                                    # builder['altItems'] = 0
 
                                     new_bom.append(builder)
-                                    
+
                                     line_no = line_no + 1
 
                         except WrongItem:
-                            item_doesnt_exist(row['part'],drawing_no_list[0])
+                            item_doesnt_exist(row['part'], drawing_no_list[0])
 
                         # edit data to match what is now in misys
                         rows = data.index[data_drop]
                         data.drop(rows, inplace=True)
                         for row in new_bom:
-                            data = data.append(row,True)
-                        os.remove('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
-                        data.to_csv('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV', index=False)
+                            data = data.append(row, True)
+                        os.remove(
+                            'D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
+                        data.to_csv(
+                            'D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV', index=False)
 
                     # save bom
                     pygui.click(save)
@@ -264,13 +263,13 @@ def main():
                     pygui.typewrite(str(excel_rev))
                     pygui.click(revision)
                     os.chdir('png')
-                    while pygui.locateOnScreen('revision_date.png', region=(42,190,96,20)) is None:
+                    while pygui.locateOnScreen('revision_date.png', region=(42, 190, 96, 20)) is None:
                         time.sleep(1)
                     os.chdir('..')
                     pygui.click(current_revision)
                     pygui.click(material)
                     os.chdir('png')
-                    while pygui.locateOnScreen('alternates.png', region=(124,1000,75,25)) is None:
+                    while pygui.locateOnScreen('alternates.png', region=(124, 1000, 75, 25)) is None:
                         time.sleep(1)
                     os.chdir('..')
                     pygui.click(save)
@@ -293,7 +292,7 @@ def main():
 
                     # reorder the data so it will match the excel bom
                     ordered_bom = []
-                    for line in range(0,len(active_bom)+2):
+                    for line in range(0, len(active_bom)+2):
                         for i in active_bom:
                             if int(i['line']) == line - 1:
                                 ordered_bom.append(i)
@@ -302,15 +301,18 @@ def main():
                                     builder['part'] = i['part']
                                     builder['qty'] = i['qty']
 
-                    data = data.append(row,True)
-                    os.remove('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
-                    data.to_csv('D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV', index=False)
+                    data = data.append(row, True)
+                    os.remove(
+                        'D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV')
+                    data.to_csv(
+                        'D:\MIsys Data\Bill of Materials\Bill of Material Details.CSV', index=False)
 
                     main()
-                
+
                 else:
                     print('Bom rev is lower than MiSys rev.')
                     continue
+
 
 if __name__ == '__main__':
     main()
